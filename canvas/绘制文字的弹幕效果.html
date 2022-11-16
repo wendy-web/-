@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas的绘制圆形</title>
+</head>
+<body>
+    canvas的画布绘制
+    <canvas id="canva_id" width="600" height="600"></canvas>
+    <script type="module">
+        // 1. 找到画布的对象
+        let canvasDom = document.getElementById('canva_id');
+        console.log([canvasDom]);
+        // 2.上下文对象（画笔）
+        let ctx = canvasDom.getContext('2d');
+        console.log(ctx); // 画笔中的一些属性的方法值
+
+        ctx.font = '50px 微软雅黑';
+
+        // 绘制阴影
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = 'rgba(0, 0, 0, 1)';
+        ctx.shadowOffsetX = 10;
+        ctx.shadowOffsetY = 10;
+        let x = 600;
+        setInterval(() => {
+            // 绘制的时候进行清空画布
+            ctx.clearRect(0, 0, 600, 600);
+            x -= 10;
+            ctx.fillText('helloWorld', x, 100);
+            ctx.strokeText('中午吃啥呢', x, 200);
+        }, 30);
+        
+    </script>
+</body>
+</html>
