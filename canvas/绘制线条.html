@@ -1,0 +1,53 @@
+<!--
+ * @Author: wendy 463710868@qq.com
+ * @Date: 2022-11-16 21:55:56
+ * @LastEditors: wendy 463710868@qq.com
+ * @LastEditTime: 2022-11-16 22:06:11
+ * @FilePath: /模块的学习/canvas/绘制线条.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas的绘制线条</title>
+</head>
+<body>
+    canvas的画布绘制
+    <canvas id="canva_id" width="600" height="400"></canvas>
+    <script type="module">
+        // 1. 找到画布的对象
+        let canvasDom = document.getElementById('canva_id');
+        console.log([canvasDom]);
+        // 2.上下文对象（画笔）
+        let ctx = canvasDom.getContext('2d');
+        console.log(ctx); // 画笔中的一些属性的方法值
+
+        // 设置开始路径
+        ctx.beginPath();
+
+
+        // 设置绘制的起点
+        ctx.moveTo(50, 50);
+        // 设置经过的某个位置
+        ctx.lineTo(50, 300);
+        ctx.lineTo(300, 100);
+        ctx.lineTo(300, 250);
+
+        // 设置结束的点
+        ctx.closePath();
+
+        // 设置起始的线条的边角的样式；设置为圆角
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.miterLimit = 2;
+        ctx.strokeStyle = 'aqua';
+        ctx.lineWidth = 20;
+        ctx.stroke();
+        
+    </script>
+</body>
+</html>
