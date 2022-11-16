@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas的绘制图片</title>
+</head>
+<body>
+    canvas的画布绘制
+    <canvas id="canva_id" width="400" height="300"></canvas>
+    <video id="video_id" src="./images/movie.mp4" width="400" controls></video>
+    <script type="module">
+        let canvasDom = document.getElementById('canva_id');
+        let videoDom = document.getElementById('video_id');
+        let ctx = canvasDom.getContext('2d');
+        console.log(ctx); // 画笔中的一些属性的方法值
+
+
+        let interId;
+        videoDom.onplay = () => {
+            interId = setInterval(() => {
+                // 绘制视频，在这里进行视频的操作，例如：添加背景，水印，弹幕的形式
+                ctx.clearRect(0, 0, 400, 300); // 进行绘制的清除
+                ctx.fillRect(0, 0, 400, 300); // 绘制背景
+                ctx.drawImage(videoDom, 0, 40, 400, 220);
+
+                ctx.font = '20 微软雅黑';
+                ctx.strokeStyle = '#999';
+                ctx.strokeText('wendy添加video的水印签', 20, 20)
+            }, 16);
+        }
+        videoDom.onpause = () => {
+            clearInterval(interId);
+        }
+    </script>
+</body>
+</html>
