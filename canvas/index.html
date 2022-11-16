@@ -1,0 +1,41 @@
+<!--
+ * @Author: wendy 463710868@qq.com
+ * @Date: 2022-11-16 21:12:44
+ * @LastEditors: wendy 463710868@qq.com
+ * @LastEditTime: 2022-11-16 21:28:09
+ * @FilePath: /模块的学习/index.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas的画布引用</title>
+</head>
+<body>
+    canvas的画布绘制
+    <canvas id="canva_id" width="600" height="400"></canvas>
+    <script type="module">
+        // 1. 找到画布的对象
+        let canvasDom = document.getElementById('canva_id');
+        console.log([canvasDom]);
+        // 2.上下文对象（画笔）
+        let ctx = canvasDom.getContext('2d');
+        console.log(ctx); // 画笔中的一些属性的方法值
+
+        // 3. 绘制路径
+        ctx.rect(50, 50, 300, 300);
+
+        // 4. 填充
+        ctx.fillStyle = 'aqua';
+        ctx.fill();
+
+        // 5. 描边
+        ctx.strokeStyle = 'salmon';
+        ctx.stroke();
+        
+    </script>
+</body>
+</html>
