@@ -1,0 +1,43 @@
+<!--
+ * @Author: wendy 463710868@qq.com
+ * @Date: 2022-11-16 23:30:58
+ * @LastEditors: wendy 463710868@qq.com
+ * @LastEditTime: 2022-11-16 23:37:18
+ * @FilePath: /模块的学习/canvas/5.绘制图片.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas的绘制图片</title>
+</head>
+<body>
+    canvas的画布绘制
+    <canvas id="canva_id" width="600" height="600"></canvas>
+    <script type="module">
+        // 1. 找到画布的对象
+        let canvasDom = document.getElementById('canva_id');
+        console.log([canvasDom]);
+        // 2.上下文对象（画笔）
+        let ctx = canvasDom.getContext('2d');
+        console.log(ctx); // 画笔中的一些属性的方法值
+
+        let img1 = new Image();
+        img1.src = './images/cat.webp';
+        let img2 = new Image();
+        img2.src = './images/dog.webp';
+        // 图片加载完后再进行绘制
+        img1.onload = () => {
+            ctx.drawImage(img1, 50, 50, 500, 300);
+            // 图片加载完后再进行绘制
+            img2.onload = () => {
+                ctx.drawImage(img2, 50, 50, 200,200);
+                ctx.fillText('wendy', 550, 480)
+            }
+        }
+    </script>
+</body>
+</html>
