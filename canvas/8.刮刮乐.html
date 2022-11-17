@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas的刮刮乐</title>
+</head>
+<body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            line-height: 100px;
+            text-align: center;
+        }
+        #ggk_box {
+            position: relative;
+            width: 400px;
+            height: 100px;
+            line-height: 100px;
+            margin: auto;
+            border: 2px solid gray;
+            text-align: center;
+            border-radius: 10px;
+            font-size: 40px;
+        }
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+    </style>
+    <h1>刮刮乐的区域</h1>
+    <div id="ggk_box">
+       <div class="open_text">谢谢惠顾</div>
+       <canvas id="canvas" width="400" height="100"></canvas>
+    </div>
+
+    <script type="module">
+        const canvas = document.getElementById('canvas');
+        const ggkBox = document.getElementById('ggk_box');
+        const openText = document.getElementById('open_text');
+
+        const canvasCtx = canvas.getContext('2d');
+        canvasCtx.fillStyle = "darkgray";
+        canvasCtx.fillRect(0, 0, 400, 100);
+        canvasCtx.font = '40px 微软雅黑';
+        canvasCtx.fillText('刮刮卡', 180, 50);
+        let isDraw = false;
+        canvas.onmousedown = () => {
+            isDraw = true;
+        }
+        canvas.onmousemove = function(event) {
+            if (isDraw) {
+                const x = event.pageX - ggkBox.offsetLeft;
+                const y = event.pageY - ggkBox.offsetTop;
+                canvasCtx.globalCompositeOperation = 'destination-out';
+                canvasCtx.arc(x, y, 20, 0, 2 * Math.PI);
+                canvasCtx.fill();
+            }
+        }
+        canvas.onmouseup = () => {
+            isDraw = false;
+        }
+    </script>
+</body>
+</html>
