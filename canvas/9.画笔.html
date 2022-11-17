@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas的刮刮乐</title>
+</head>
+<body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #canvas {
+            border: 1px solid black;
+            margin: 0 auto;
+        }
+        .imgs {
+            width: 800px;
+            height: 300px;
+            border-radius: 10px;
+            border: 1px solid gray;
+            background: gray;
+        }
+    </style>
+    <div class="container">
+        <div>
+            <button id="clear">清空画布</button>
+            <button id="imgInfo">保存签名</button>
+            <label for="selWidth">输入画笔的大小：</label><input type="text" id="selWidth" value="10" />
+            <label for="selColor">输入画笔的颜色：</label><input type="color" id="selColor" />
+
+        </div>
+        <canvas id="canvas" width="800" height="300"></canvas>
+        <div>保存图片如下： <button id="downBtn">下载</button></div>
+        <hr />
+        <div class="imgs" id="imgs"></div>
+    </div>
+
+    <script type="module">
+        //1.获取canvas
+        var myCanvas = document.getElementById("canvas");
+        //获取2d对象
+        var ctx = myCanvas.getContext("2d");
+        //清空画布
+        var clear = document.getElementById("clear");
+        //线条
+        var selWidth = document.getElementById("selWidth");
+        // 颜色
+        var selColor = document.getElementById("selColor");
+        // 保存签名
+        var imgInfo = document.getElementById("imgInfo");
+        // 保存的盒子
+        var imgs = document.getElementById("imgs");
+        // 下载图片
+        const downBtn = document.getElementById('downBtn');
+        //控制线条是否画
+        var isMouseMove = false;
+        //线条位置
+        var lastX, lastY;
+        let widthVal = selWidth.value;
+        let colorVal = selColor.value;
+        // 保存生成的url
+        let imagesUrl;
+        window.onload = function () {
+            initCanvas();
+        };
+        //初始化
+        function initCanvas() {
+            //PC端
+            var down = (e) => {
+                isMouseMove = true;
+                drawLine(
+                    event.pageX - myCanvas.offsetLeft,
+                    event.pageY - myCanvas.offsetTop,
+                    false
+                );
+            };
+            let move = (e) => {
+                if (isMouseMove) {
+                    drawLine(
+                        event.pageX - myCanvas.offsetLeft,
+                        event.pageY - myCanvas.offsetTop,
+                        true
+                    );
+                }
+            };
+            let up = (e) => {
+                isMouseMove = false;
+            };
+            let leave = (e) => {
+                isMouseMove = false;
+            };
+            myCanvas.addEventListener("mousedown", down);
+            myCanvas.addEventListener("mousemove", move);
+            myCanvas.addEventListener("mouseup", up);
+            myCanvas.addEventListener("mouseleave", leave);
+        }
+        //画线
+        function drawLine(x, y, isT) {
+            if (isT) {
+                ctx.beginPath();
+                ctx.lineWidth = widthVal; //设置线宽状态
+                ctx.strokeStyle = colorVal; //设置线的颜色状态
+                ctx.lineCap = 'round'
+                ctx.lineJoin = "round";
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                ctx.closePath();
+            }
+            // 每次移动都要更新坐标位置
+            lastX = x;
+            lastY = y;
+        }
+
+        //清空画图
+        function clearCanvas() {
+            imgs.innerHTML = ""
+            ctx.beginPath();
+            ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+            ctx.closePath(); //可加入，可不加入
+        }
+        //线条粗细
+        function lineCrude() {
+            widthVal = selWidth.value;
+        }
+        //改变颜色
+        function setColor() {
+            colorVal = selColor.value;
+        }
+        //保存图片
+        function saveImgInfo() {
+            imagesUrl = myCanvas.toDataURL('image/png');
+            imgs.innerHTML = `<img src='${imagesUrl}'>`
+        }
+        // 下载图片
+        function downImg() {
+            // 创建一个a的标签进行下载
+            const a = document.createElement('a');
+            a.setAttribute('download', '1.png');
+            a.href = imagesUrl;
+            a.click();
+        }
+        clear.addEventListener("click", clearCanvas);
+        selWidth.addEventListener("change", lineCrude);
+        selColor.addEventListener("change", setColor);
+        imgInfo.addEventListener("click", saveImgInfo);
+        downBtn.addEventListener("click", downImg);
+
+        
+    </script>
+</body>
+</html>
