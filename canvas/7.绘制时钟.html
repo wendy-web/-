@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas的绘制时钟</title>
+</head>
+<body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            line-height: 100px;
+        }
+        .clock_box {
+            position: relative;
+            z-index: 0;
+            width: 600px;
+            height: 600px;
+            margin: 100px auto;
+            border: 2px solid gray;
+            text-align: center;
+            border-radius: 10px;
+        }
+        #canva_cicle {
+            position: absolute;
+            z-index: -1;
+        }
+    </style>
+    <div class="clock_box">
+        <h1>canvas绘制时钟</h1>
+        <canvas id="canva_cicle" width="500" height="500"></canvas>
+        <canvas id="canva_line" width="500" height="500"></canvas>
+    </div>
+
+    <script type="module">
+        const canvasCicle = document.getElementById('canva_cicle');
+        const cicleCtx = canvasCicle.getContext('2d');
+        const canvasLine = document.getElementById('canva_line');
+        const lineCtx = canvasLine.getContext('2d');
+
+        // 绘制表盘
+        renderClockCicle();
+        function renderClockCicle () {
+            cicleCtx.save(); // 进行当前translate中心轴偏移的存储
+            cicleCtx.translate(250, 250); // 当前绘制的中心到（300， 300）的坐标轴中
+
+            cicleCtx.beginPath();
+            cicleCtx.arc(0, 0, 200, 0, 2*Math.PI, false);
+            cicleCtx.strokeStyle = "darkgray";
+            cicleCtx.lineWidth = 10;
+            cicleCtx.stroke();
+            cicleCtx.closePath();
+
+            for(let i = 0; i < 60; i++) {
+                cicleCtx.rotate(Math.PI / 30); // 旋转表盘进行绘制刻度
+                cicleCtx.beginPath();
+                cicleCtx.moveTo(180, 0);
+                cicleCtx.lineTo(190, 0); // 圆的半径是0
+                cicleCtx.lineWidth = 2;
+                cicleCtx.strokeStyle = "pink";
+                cicleCtx.stroke();
+            }
+            // 绘制时钟的刻度
+            for(let i = 0; i < 12; i++) {
+                cicleCtx.rotate(Math.PI / 6); // 旋转表盘进行绘制刻度
+                cicleCtx.beginPath();
+                cicleCtx.moveTo(180, 0);
+                cicleCtx.lineTo(200, 0); // 圆的半径是0
+                cicleCtx.lineWidth = 10;
+                cicleCtx.lineCap = 'round';
+                cicleCtx.strokeStyle = "darkgray";
+                cicleCtx.stroke();
+            }
+        }
+        
+        // 每隔一秒钟进行绘制
+        setInterval(() => {
+            renderClockLine();
+
+        }, 1000);
+        // 渲染时针
+        function renderClockLine() {
+            lineCtx.clearRect(0, 0, 500, 500);
+            lineCtx.save(); // 进行当前translate中心轴偏移的存储
+            lineCtx.translate(250, 250); // 当前绘制的中心到（300， 300）的坐标轴中
+            lineCtx.rotate(-2 * Math.PI / 4); // 将表盘逆时针的选择回轴刻度是90度
+
+            const time = new Date();
+            let hoursNum = time.getHours();
+            const minNum = time.getMinutes();
+            const secNum = time.getSeconds();
+            hoursNum = hoursNum > 12 ? (hoursNum - 12) : hoursNum;
+            // console.log(hoursNum, minNum, secNum);
+            lineCtx.save();
+            // 绘制秒针的旋转
+            lineCtx.beginPath();
+            lineCtx.rotate(2 * Math.PI / 60 * secNum);
+            lineCtx.moveTo(-30, 0); // 线条的开始
+            lineCtx.lineTo(170, 0); // 绘制的结束
+            lineCtx.lineWidth = 2;
+            lineCtx.strokeStyle = 'red';
+            lineCtx.stroke();
+            lineCtx.closePath();
+
+            // 进行恢复再保留的形式
+            lineCtx.restore();
+            lineCtx.save();
+
+            // 绘制分针
+            lineCtx.beginPath();
+            lineCtx.rotate(2 * Math.PI / 60 * minNum + 2 * Math.PI / 3600 * secNum);
+            lineCtx.moveTo(-20, 0);
+            lineCtx.lineTo(150, 0);
+            lineCtx.lineWidth = 2;
+            lineCtx.strokeStyle = 'drakblue';
+            lineCtx.stroke();
+            lineCtx.closePath();
+
+            // 进行恢复再保留的形式
+            lineCtx.restore();
+            lineCtx.save();
+
+            // 绘制时针
+            lineCtx.beginPath();
+            lineCtx.rotate(2 * Math.PI / 12 * hoursNum + 2 * Math.PI / 60 / 12 * hoursNum + 2 * Math.PI / 12 / 60 /60);
+            lineCtx.moveTo(-10, 0);
+            lineCtx.lineTo(100, 0);
+            lineCtx.lineWidth = 6;
+            lineCtx.strokeStyle = 'drak';
+            lineCtx.stroke();
+            lineCtx.closePath();
+
+            // 绘制指针的固定圆
+            lineCtx.arc(0, 0, 10, 0, 2 * Math.PI);
+            lineCtx.fillStyle = "darkgray";
+            lineCtx.fill();
+            lineCtx.closePath();
+
+            // 进行将位置清除回归
+            lineCtx.restore();
+            lineCtx.restore();
+        }
+    </script>
+</body>
+</html>
